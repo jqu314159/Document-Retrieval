@@ -1,13 +1,6 @@
 import logging
 import pandas as pd
 
-"""
-print(df['I1'])
-print(df['TID'])
-print(df['TID'][1])
-print("0000",df.keys())
-"""
-
 class dataset_process:
     def __init__(
         self,
@@ -15,14 +8,13 @@ class dataset_process:
         self.dateset = {}
 
     def _get_config(self, args):
-        assert isinstance(args, (tuple, list))
-        config = self.config
-        for arg in args:
-            try:
-                config = config[arg]
-            except ValueError:
-                logging.error("Missing configuration '{arg}'!")
-        return config
+        try:
+            idx = test.dateset[args]
+            print(idx)
+            return idx
+        except KeyError:
+            print('Keyword not in index')
+        
     
     def scan_dataset(self, df):
         for doc_id_maber in df.keys():
@@ -42,6 +34,10 @@ class dataset_process:
                         self.dateset[team_][doc_id_maber]['pos'].append(count_word) 
 
 test = dataset_process()
-df = pd.read_csv ('2.csv')
+df = pd.read_csv ('ex_testbook.csv')
 test.scan_dataset(df)
-print(test.dateset)
+#print(test.dateset)
+keyword = 'T1'
+index_doc = test._get_config(keyword)
+
+

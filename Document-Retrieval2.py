@@ -96,9 +96,8 @@ with open(dir, "rb") as fp:
     docs.append(html_doc)
     all_text += html_doc + ' '
 
-print(doc_id)
-print(len(docs))
-print(len(all_text))
+print("len(docs) = ",len(docs))
+print("len(all_text) = ",len(all_text))
 # Remove punctuation via regex
 if remove_punctuation:
     all_text = re.sub(r'[^\w\s]', ' ', all_text)
@@ -117,7 +116,6 @@ text_tokens = word_tokenize(all_text)
 text_tokens = sorted(list(set(text_tokens)))
 
 len(text_tokens)  #teams
-print(text_tokens)
 # Remove stopwords, if needed
 # 55 seconds for 10k words
 if remove_stopwords:
@@ -126,19 +124,6 @@ if remove_stopwords:
 dict = {}  
 prog_freq = 10
 prog_docs = int(doc_id / prog_freq)
-
-for i in range(doc_id):
-    
-    if (i + 1) % prog_docs == 0 or i + 1 == doc_id:
-        print('[{} / {}]'.format(i + 1, doc_id)) 
-
-    for item in text_tokens:
-  
-        if item in docs[i]:
-            if item not in dict:
-                dict[item] = [i + 1]
-            else:
-                dict[item].append(i + 1)
 
 class dataset_process:
     def __init__(
@@ -161,16 +146,18 @@ class dataset_process:
                     else:
                         self.dateset[team_][doc_id_maber]['doc_frequency'] += 1
                         self.dateset[team_][doc_id_maber]['pos'].append(count_word)
+    def _get_config(self, args):
+        try:
+            idx = test.dateset[args]
+            print("keyword = ", args)
+            print(idx)
+            return idx
+        except KeyError:
+            print('Keyword not in index')
 
 
 test = dataset_process()
 #df = pd.read_csv ('2.csv')
 test.scan_dataset(docs)
 keyword = 'your'
-
-try:
-    idx = test.dateset[keyword]
-    print(idx)
-    print(len(idx))
-except KeyError:
-    print('Keyword not in index')
+index_doc = test._get_config(keyword)
